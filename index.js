@@ -29,17 +29,37 @@ app.use(express.json())
 const generateId = () => {
     const id = Math.floor(Math.random() * 100000);
     return id + 1
-  }
+}
+
+function searchName(name) {
+    for (let i = 0; i < persons.length; i++) { 
+        const person = persons[i];
+        if (person.name === name) {
+            return true;
+        } 
+    }
+    return false;
+}
+
   
   app.post('/api/persons', (request, response) => {
     const body = request.body
-  
+    
     if (!body.name) {
       return response.status(400).json({ 
-        error: 'content missing' 
+        error: 'name missing' 
       })
     }
-  
+    if (!body.number) {
+        return response.status(400).json({ 
+          error: 'number missing' 
+        })
+      }
+    if (searchName(body.name)){
+        return response.status(400).json({ 
+            error: 'name already exists ' 
+          })
+    }
     const person = {
       name: body.name,
       number: body.number,
@@ -54,6 +74,7 @@ const generateId = () => {
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
+
   })
 
 app.get('/info', (request, response) => {
@@ -74,7 +95,6 @@ app.get('/api/persons/:id', (request, response) => {
 app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
-
     response.status(204).end()
 })
 
