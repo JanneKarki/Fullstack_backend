@@ -24,6 +24,33 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+app.use(express.json())
+
+const generateId = () => {
+    const id = Math.floor(Math.random() * 100000);
+    return id + 1
+  }
+  
+  app.post('/api/persons', (request, response) => {
+    const body = request.body
+  
+    if (!body.name) {
+      return response.status(400).json({ 
+        error: 'content missing' 
+      })
+    }
+  
+    const person = {
+      name: body.name,
+      number: body.number,
+      id: generateId(),
+    }
+  
+    persons = persons.concat(person)
+  
+    response.json(persons)
+  })
+
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
