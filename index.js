@@ -1,6 +1,6 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
-
 
 let persons = [
     { 
@@ -26,8 +26,14 @@ let persons = [
 ]
 app.use(express.json())
 
-const morgan = require('morgan')
-app.use(morgan('tiny'))
+const cors = require('cors')
+
+app.use(cors())
+morgan.token('req-body', (req) => JSON.stringify(req.body))
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req-body', {
+  
+}))
 
 const generateId = () => {
     const id = Math.floor(Math.random() * 100000);
@@ -100,7 +106,6 @@ app.delete('/api/persons/:id', (request, response) => {
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 })
-
 
 
 const PORT = 3001
