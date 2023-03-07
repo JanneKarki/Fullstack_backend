@@ -26,6 +26,9 @@ let persons = [
 ]
 app.use(express.json())
 
+const morgan = require('morgan')
+app.use(morgan('tiny'))
+
 const generateId = () => {
     const id = Math.floor(Math.random() * 100000);
     return id + 1
