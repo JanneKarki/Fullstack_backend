@@ -33,7 +33,7 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
   })
 })
-/*
+
 app.post('/api/persons', (request, response) => {
     const body = request.body
       
@@ -47,23 +47,24 @@ app.post('/api/persons', (request, response) => {
           error: 'number missing' 
         })
       }
-    if (searchName(body.name)){
+    /*
+      if (searchName(body.name)){
         return response.status(400).json({ 
             error: 'name already exists ' 
           })
-    }
+      }
+    */
     const person = new Person ({
       id: generateId(),
       name: body.name,
       number: body.number,
     })
     person.save().then(result => {
+      response.json(result)
       console.log(`added ${body.name} number ${body.number}`)
     })
-    
   })
 
-*/
 const PORT = process.env.PORT || 3001
   app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
