@@ -62,13 +62,13 @@ app.post('/api/persons', (request, response) => {
           error: 'number missing' 
         })
       }
-    /*
-      if (searchName(body.name)){
-        return response.status(400).json({ 
-            error: 'name already exists ' 
-          })
-      }
-    */
+    
+    //if (searchName(body.name)){
+      //  return response.status(400).json({ 
+        //    error: 'name already exists ' 
+         // })
+     // }
+  
     const person = new Person ({
       id: generateId(),
       name: body.name,
@@ -82,10 +82,12 @@ app.post('/api/persons', (request, response) => {
 
 
 
-//app.get('/info', (request, response) => {
-//    const count = persons.length;
-//    response.send(`<div><p>Phonebook has info for ${count} people</p><p>${new Date()}</p></div>`)
-//  })
+app.get('/info', (request, response) => {
+  (async () => {
+    const count = await Person.countDocuments();
+    response.send(`<div><p>Phonebook has info for ${count} people</p><p>${new Date()}</p></div>`);
+  })();
+  })
 
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
