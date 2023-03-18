@@ -16,9 +16,23 @@ mongoose.connect(url)
 
   const personSchema = new mongoose.Schema({
     id: Number,
-    name: String,
-    number: String,
-  })
+    name: {
+      type: String,
+      minLength: 3,
+      required: true
+    },
+    number: {
+      type: String,
+      minLength: 8,
+      required: true,
+      validate: {
+        validator: function(number) {
+          const phoneRegex = /^(\d{2,3}-)?\d{7,}$/;
+          return phoneRegex.test(number);
+        },
+      }
+    }
+  });
   
   personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
