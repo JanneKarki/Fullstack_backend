@@ -6,8 +6,8 @@ if (process.argv.length<3) {
 }
 
 const generateId = () => {
-    const id = Math.floor(Math.random() * 100000);
-    return id
+  const id = Math.floor(Math.random() * 100000)
+  return id
 }
 
 const password = process.argv[2]
@@ -32,24 +32,24 @@ const person = new Person({
   id: generateId(),
   name: name,
   number: number,
-  
+
 
 })
 
 if (!name && !number) {
-    Person.find({}).then(result => {
-        console.log("phonebook:")
-        result.forEach(person => {
-          console.log(`${person.name} ${person.number}`)
-        })
-        mongoose.connection.close()
-      })
+  Person.find({}).then(result => {
+    console.log('phonebook:')
+    result.forEach(person => {
+      console.log(`${person.name} ${person.number}`)
+    })
+    mongoose.connection.close()
+  })
 
 } else {
-    person.save().then(result => {
-        console.log(`added ${name} number ${number}`)
-        mongoose.connection.close()
-      })
+  person.save().then(result => {
+    console.log(`added ${result.name} number ${result.number}`)
+    mongoose.connection.close()
+  })
 
 }
 

@@ -13,7 +13,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :r
 morgan.token('req-body', (req) => JSON.stringify(req.body))
 
 const generateId = () => {
-  const id = Math.floor(Math.random() * 100000);
+  const id = Math.floor(Math.random() * 100000)
   return id
 }
 
@@ -23,7 +23,7 @@ function searchName(name) {
       console.log(person)
         if (person.name === name) {
             return true;
-        } 
+        }
         return false;
     })
 }
@@ -53,39 +53,39 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.post('/api/persons', (request, response, next) => {
-    const body = request.body
-       
-    const person = new Person ({
-      id: generateId(),
-      name: body.name,
-      number: body.number,
-    })
-    person.save().then(result => {
-      console.log(`result = ${result}`)
-      if(result) {
-        response.json(result);
-        console.log(`added ${body.name} number ${body.number}`);
-      }
-    })
-    .catch(error => next(error))
+  const body = request.body
+
+  const person = new Person ({
+    id: generateId(),
+    name: body.name,
+    number: body.number,
   })
+  person.save().then(result => {
+    console.log(`result = ${result}`)
+    if(result) {
+      response.json(result)
+      console.log(`added ${body.name} number ${body.number}`)
+    }
+  })
+    .catch(error => next(error))
+})
 
 
 
 app.get('/info', (request, response) => {
   (async () => {
-    const count = await Person.countDocuments();
-    response.send(`<div><p>Phonebook has info for ${count} people</p><p>${new Date()}</p></div>`);
-  })();
-  })
+    const count = await Person.countDocuments()
+    response.send(`<div><p>Phonebook has info for ${count} people</p><p>${new Date()}</p></div>`)
+  })()
+})
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Person.findById(request.params.id)
+  Person.findById(request.params.id)
     .then(person => {
-      if (person) {    
-        response.json(person)  
-      } else {    
-        response.status(404).end()  
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
       }
     })
     .catch(error => next(error))
@@ -94,12 +94,12 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.put('/api/persons/:id', (request, response, next) => {
   const { id, name, number } = request.body
   console.log(`${id} ${name}`)
-  
+
   Person.findByIdAndUpdate(
     request.params.id,
-    {name, number },
+    { name, number },
     { new: true, runValidators: true, context: 'query' }
-    )
+  )
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
@@ -108,8 +108,9 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    Person.findByIdAndRemove(request.params.id)
+  Person.findByIdAndRemove(request.params.id)
     .then(result => {
+      console.log(`Deleted ${result.name} from the database.`)
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -119,6 +120,6 @@ app.use(unknownEndpoint)
 app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
-  app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
